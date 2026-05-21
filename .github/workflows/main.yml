@@ -1,0 +1,25 @@
+---
+name: build java application
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+jobs:
+    jobs1:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v6
+            - name: install java on runner
+              uses: actions/setup-java@v5
+              with:
+                java-version: '17'
+                distribution: 'temurin'  
+            - name: build java code
+              run: mvn clean package
+            - name: deploy the code
+              run: echo "deploying the code"
