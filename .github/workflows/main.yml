@@ -1,7 +1,7 @@
 name: Build java application
 on:
     workflow_dispatch:
-    inputs:
+     inputs:
         job_name:
             description: 'Enter the job name'
             required: true
@@ -40,4 +40,4 @@ jobs:
               run: mvn -B verify sonar:sonar -Dsonar.projectKey=sonar-qube-project_demo -Dsonar.organization=sonar-qube-project -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }}
               env:
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-                github_token: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
