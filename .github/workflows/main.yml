@@ -1,25 +1,43 @@
----
-name: build java application
+name: Build java application
 on:
     workflow_dispatch:
-    push:
-        branches:
-            - master
-    pull_request:
-        branches:
-            - master
+    inputs:
+        job_name:
+            description: 'Enter the job name'
+            required: true
+            type: choice
+            options:
+                - job1_build
+                - job2_codecoverage
 jobs:
-    jobs1:
+    job1_build:
+        if: ${{ github.event.inputs.job_name == 'job1_build' }}
         runs-on: ubuntu-latest
         steps:
-            - name: checkout code
+            - name: clone the repository
               uses: actions/checkout@v6
             - name: install java on runner
               uses: actions/setup-java@v5
               with:
-                java-version: '17'
-                distribution: 'temurin'  
+                    java-version: '17'
+                    distribution: 'temurin'
             - name: build java code
               run: mvn clean package
-            - name: deploy the code
-              run: echo "deploying the code"
+    job2_codecoverage:
+        if: ${{ github.event.inputs.job_name == 'job2_codecoverage' }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: clone the repository
+              uses: actions/checkout@v6
+            - name: install java on runner
+              uses: actions/setup-java@v5
+              with:
+                    java-version: '17'
+                    distribution: 'temurin'
+            - name: build java code
+              run: mvn clean package
+            - name: code coverage using sonarcloud
+              run: mvn -B verify sonar:sonar -Dsonar.projectKey=sonar-qube-project_demo -Dsonar.organization=sonar-qube-project -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+              env:
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                github_token: ${{ secrets.GITHUB_TOKEN }}
