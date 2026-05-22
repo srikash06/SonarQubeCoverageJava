@@ -37,7 +37,7 @@ jobs:
             - name: build java code
               run: mvn clean package
             - name: code coverage using sonarcloud
-              run: mvn sonar:sonar -Dsonar.projectKey=sonar-qube-project_demo -Dsonar.organization=sonar-qube-project -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN
+              run: mvn -B verify sonar:sonar -Dsonar.projectKey=sonar-qube-project_demo -Dsonar.organization=sonar-qube-project -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.token=$SONAR_TOKEN
               env:
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
